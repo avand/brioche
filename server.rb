@@ -2,10 +2,11 @@ require "sinatra"
 require "google_drive"
 
 post "/expenses" do
-  raise params.inspect
+  text  = params["Body"]
+  match = text.match(/^(\S*)(.*)/)
 
-  amount      = params[:amount]
-  description = params[:description]
+  amount      = match[1].to_f
+  description = match[2].strip
   date        = Time.now.strftime("%-m/%-d/%Y")
 
   session     = GoogleDrive.login(ENV["GOOGLE_EMAIL"], ENV["GOOGLE_PASSWORD"])
@@ -19,5 +20,5 @@ post "/expenses" do
 
   worksheet.save
 
-  "Success!"
+  "Saved $#{amount} on #{date} for #{description}"
 end
