@@ -1,7 +1,13 @@
 require "sinatra"
 require "google_drive"
+require 'twilio-ruby'
+
+TWILIO = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
 
 post "/expenses" do
+  to_number   = params["To"]
+  from_number = params["From"]
+
   text  = params["Body"]
   match = text.match(/^(\S*)(.*)/)
 
@@ -20,5 +26,14 @@ post "/expenses" do
 
   worksheet.save
 
-  "Saved $#{amount} on #{date} for #{description}"
+  confirmation = "Saved $#{amount} on #{date} for #{description}"
+
+  begin
+    TWILIO.account.sms.messages.create({
+      to:   from_number,
+      from: to_number,
+      body: confirmation
+    })
+  rescue
+  end
 end
