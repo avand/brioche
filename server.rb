@@ -17,7 +17,7 @@ post "/expenses" do
 
   session     = GoogleDrive.login(ENV["GOOGLE_EMAIL"], ENV["GOOGLE_PASSWORD"])
   spreadsheet = session.spreadsheet_by_key(ENV["SPREADSHEET_KEY"])
-  worksheet   = spreadsheet.worksheets[ENV["WORKSHEET_INDEX"]]
+  worksheet   = spreadsheet.worksheets[ENV["WORKSHEET_INDEX"].to_i]
   row         = worksheet.num_rows + 1
 
   worksheet[row, 1] = description
