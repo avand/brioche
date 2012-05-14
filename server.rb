@@ -26,7 +26,7 @@ post "/expenses" do
 
   worksheet.save
 
-  confirmation = "Saved $#{amount} on #{date} for #{description}"
+  confirmation = "Recorded $#{amount} on #{date} for \"#{description}\""
 
   TWILIO.account.sms.messages.create({
     to:   from_number,
