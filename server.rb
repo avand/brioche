@@ -2,6 +2,8 @@ require "sinatra"
 require "google_drive"
 
 post "/expenses" do
+  raise params.inspect
+
   amount      = params[:amount]
   description = params[:description]
   date        = Time.now.strftime("%-m/%-d/%Y")
