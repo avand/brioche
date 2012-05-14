@@ -28,12 +28,9 @@ post "/expenses" do
 
   confirmation = "Saved $#{amount} on #{date} for #{description}"
 
-  begin
-    TWILIO.account.sms.messages.create({
-      to:   from_number,
-      from: to_number,
-      body: confirmation
-    })
-  rescue
-  end
+  TWILIO.account.sms.messages.create({
+    to:   from_number,
+    from: to_number,
+    body: confirmation
+  }) if to_number && from_number
 end
