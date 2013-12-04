@@ -1,6 +1,6 @@
 require "sinatra"
 require "google_drive"
-require 'twilio-ruby'
+require "twilio-ruby"
 
 TWILIO = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
 
@@ -9,26 +9,40 @@ post "/expenses" do
   from_number = params["From"]
 
   text  = params["Body"]
-  match = text.match(/^(\S*)(.*)/)
+  
+  if text.match(/^(\S*)(m|M|d|D)(.*)/)
+    match = text.match(/^(\S*)(m|M|d|D)(.*)/)
 
-  amount      = match[1].to_f
-  description = match[2].strip
-  date        = Time.now.strftime("%-m/%-d/%Y")
+    expamount   = match[1].to_f
+    exptype     = match[2].strip
+    expitem     = match[3].strip
+    date        = Time.now.strftime("%-m/%-d/%Y")
 
-  session     = GoogleDrive.login(ENV["GOOGLE_EMAIL"], ENV["GOOGLE_PASSWORD"])
-  spreadsheet = session.spreadsheet_by_key(ENV["SPREADSHEET_KEY"])
-  worksheet   = spreadsheet.worksheets[ENV["WORKSHEET_INDEX"].to_i]
-  row         = worksheet.num_rows + 1
+    session     = GoogleDrive.login(ENV["GOOGLE_EMAIL"], ENV["GOOGLE_PASSWORD"])
+    spreadsheet = session.spreadsheet_by_key(ENV["SPREADSHEET_KEY"])
+    worksheet   = spreadsheet.worksheets[ENV["WORKSHEET_INDEX"].to_i]
+    row         = worksheet.num_rows + 1
 
-  worksheet[row, 1] = description
-  worksheet[row, 2] = date
-  worksheet[row, 3] = amount
+    worksheet[row, 2] = expitem
+    worksheet[row, 3] = exptype
+    worksheet[row, 4] = expamount
+    worksheet[row, 5] = date
+    worksheet[row, 6] = from_number
 
-  worksheet.save
+    worksheet.save()
 
-  confirmation = "Recorded $#{amount} on #{date} for \"#{description}\""
+    if exptype == "m" || exptype == "M"
+      confirmation = "Drove #{expamount} miles on #{date} to/from #{expitem}"
+    elsif exptype == "d" || exptype == "D"
+      confirmation = "Spent #{expamount} dollars on #{date} at/on #{expitem}"
+    else
+      confirmation = "Unknown expense type, try again"
+    end
+  else
+    confirmation = "Unknown expense type, try again"
+  end
 
-  TWILIO.account.sms.messages.create({
+  TWILIO.account.messages.create({
     to:   from_number,
     from: to_number,
     body: confirmation
