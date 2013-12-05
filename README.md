@@ -4,32 +4,40 @@ The fun way to slice the bread.
 
 ## What is it?
 
-A simple way to enter expenses into Google Docs from a text-message.
-
+A simple way to enter expenses and mileage into Google Docs from a text-message.  You can specify "m" or "M" for *mileage* driven and "d" or "D" for *dollars* spent.
 For example, if you texted:
 
-* "35 Burgers with the team"
-* "420.15 Hosting costs"
+* "35d Burgers with the team"
+* "44.1m Denver Airport"
 
 You would end up with this:
 
 <table>
   <tr>
-    <th>Description</th>
-    <th>Date</th>
+    <th>Item</th>
+    <th>Type</th>
     <th>Amount</th>
+    <th>Date</th>
+    <th>Who</th>
   </tr>
   <tr>
     <td>Burgers with the team</td>
-    <td>4/12/2012</td>
+    <td>d</td>
     <td>$35.00</td>
+    <td>12/05/2013</td>
+    <td>+13035555555</td>
   </tr>
   <tr>
-    <td>Hosting costs</td>
-    <td>4/12/2012</td>
-    <td>$420.15</td>
+    <td>Denver Airport</td>
+    <td>m</td>
+    <td>44.1</td>
+    <td>12/05/2013</td>
+    <td>+13035555555</td>
   </tr>
 </table>
+
+You can then use the "m" in Google Docs for mileage reimbursement calculation, etc.
+
 
 ## Setup
 
