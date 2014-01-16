@@ -10,8 +10,8 @@ post "/expenses" do
 
   text  = params["Body"]
   
-  if text.match(/^(\S*)(m|M|d|D)(.*)/)
-    match = text.match(/^(\S*)(m|M|d|D)(.*)/)
+  if text.match(/^(\S*)(m|M|d|D|h|H)(.*)/)
+    match = text.match(/^(\S*)(m|M|d|D|h|H)(.*)/)
 
     expamount   = match[1].to_f
     exptype     = match[2].strip
@@ -35,6 +35,8 @@ post "/expenses" do
       confirmation = "Drove #{expamount} miles on #{date} to/from #{expitem}"
     elsif exptype == "d" || exptype == "D"
       confirmation = "Spent #{expamount} dollars on #{date} at/on #{expitem}"
+    elsif exptype == "h" || exptype == "H"
+      confirmation = "Worked #{expamount} hours on #{date} for #{expitem}"
     else
       confirmation = "Unknown expense type, try again"
     end

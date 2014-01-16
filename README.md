@@ -4,11 +4,13 @@ The fun way to slice the bread.
 
 ## What is it?
 
-A simple way to enter expenses and mileage into Google Docs from a text-message.  You can specify "m" or "M" for *mileage* driven and "d" or "D" for *dollars* spent.
+A simple way to enter expenses, mileage, and hours into Google Docs from a text-message.  You can specify "m" or "M" for *mileage* driven, "d" or "D" for *dollars* spent and "h" or "H" for *hours* worked--good for overtime.
+
 For example, if you texted:
 
 * "35d Burgers with the team"
 * "44.1m Denver Airport"
+* ".75h Project X"
 
 You would end up with this:
 
@@ -31,6 +33,13 @@ You would end up with this:
     <td>Denver Airport</td>
     <td>m</td>
     <td>44.1</td>
+    <td>12/05/2013</td>
+    <td>+13035555555</td>
+  </tr>
+  <tr>
+    <td>Projext X</td>
+    <td>h</td>
+    <td>.75</td>
     <td>12/05/2013</td>
     <td>+13035555555</td>
   </tr>
