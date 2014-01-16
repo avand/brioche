@@ -37,7 +37,7 @@ You would end up with this:
     <td>+13035555555</td>
   </tr>
   <tr>
-    <td>Projext X</td>
+    <td>Project X</td>
     <td>h</td>
     <td>.75</td>
     <td>12/05/2013</td>
