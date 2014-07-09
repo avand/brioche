@@ -10,17 +10,17 @@ post "/expenses" do
 
   text  = params["Body"]
   
+  session     = GoogleDrive.login(ENV["GOOGLE_EMAIL"], ENV["GOOGLE_PASSWORD"])
+  spreadsheet = session.spreadsheet_by_key(ENV["SPREADSHEET_KEY"])
+  worksheet   = spreadsheet.worksheets[ENV["WORKSHEET_INDEX"].to_i]
+  
   if text.match(/^(\S*)(m|M|d|D|h|H)(.*)/)
-    match = text.match(/^(\S*)(m|M|d|D|h|H)(.*)/)
+    match = text.match(/^(\S*)(m|M|d|D|h|H)(.*)/).to_s
 
     expamount   = match[1].to_f
     exptype     = match[2].strip
     expitem     = match[3].strip
     date        = Time.now.strftime("%-m/%-d/%Y")
-
-    session     = GoogleDrive.login(ENV["GOOGLE_EMAIL"], ENV["GOOGLE_PASSWORD"])
-    spreadsheet = session.spreadsheet_by_key(ENV["SPREADSHEET_KEY"])
-    worksheet   = spreadsheet.worksheets[ENV["WORKSHEET_INDEX"].to_i]
     row         = worksheet.num_rows + 1
 
     worksheet[row, 2] = expitem
@@ -38,10 +38,28 @@ post "/expenses" do
     elsif exptype == "h" || exptype == "H"
       confirmation = "Worked #{expamount} hours on #{date} for #{expitem}"
     else
-      confirmation = "Unknown expense type, try again"
+      confirmation = "Unknown expense type, please try again"
     end
+  
+  elsif text.match(/^(\S*)(undo)(.*)/)
+    match = text.match(/^(\S*)(undo)(.*)/)
+    undo   = match.to_f
+    row         = worksheet.num_rows
+
+    worksheet[row, 2] = ""
+    worksheet[row, 3] = ""
+    worksheet[row, 4] = ""
+    worksheet[row, 5] = ""
+    worksheet[row, 6] = ""
+
+    worksheet.save()
+
+    if undo == "undo"
+      confirmation = "Removed last entry"
+    
+  end   
   else
-    confirmation = "Unknown expense type, try again"
+    confirmation = "Unknown command, please try again"
   end
 
   TWILIO.account.messages.create({
