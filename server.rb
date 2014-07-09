@@ -41,8 +41,8 @@ post "/expenses" do
       confirmation = "Unknown expense type, please try again"
     end
   
-  elsif text.match(/^(\S*)(rr|Rr)(.*)/)
-    match = text.match(/^(\S*)(rr|Rr)(.*)/)
+  elsif text.match(/^(\S*)(no|No)(.*)/)
+    match = text.match(/^(\S*)(no|No)(.*)/)
     
     undo   = match.to_f
 
@@ -55,11 +55,11 @@ post "/expenses" do
     worksheet[row, 3] = ""
     worksheet[row, 4] = ""
     worksheet[row, 5] = ""
-    worksheet[row, 6] = ""
+    worksheet[row, 6] = "from_number"
 
     worksheet.save()
 
-    if undo == "undo"
+    if undo == "no" || undo == "No"
       confirmation = "Removed last entry"
     
   end   
