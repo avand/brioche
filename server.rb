@@ -40,29 +40,6 @@ post "/expenses" do
     else
       confirmation = "Unknown expense type, please try again"
     end
-  
-  elsif text.match(/^(\S*)(no|No)(.*)/)
-    match = text.match(/^(\S*)(no|No)(.*)/)
-    
-    undo   = match.to_f
-
-    session     = GoogleDrive.login(ENV["GOOGLE_EMAIL"], ENV["GOOGLE_PASSWORD"])
-    spreadsheet = session.spreadsheet_by_key(ENV["SPREADSHEET_KEY"])
-    worksheet   = spreadsheet.worksheets[ENV["WORKSHEET_INDEX"].to_i]
-    row         = worksheet.num_rows
-
-    worksheet[row, 2] = ""
-    worksheet[row, 3] = ""
-    worksheet[row, 4] = ""
-    worksheet[row, 5] = ""
-    worksheet[row, 6] = "from_number"
-
-    worksheet.save()
-
-    if undo == "no" || undo == "No"
-      confirmation = "Removed last entry"
-    
-  end   
   else
     confirmation = "Unknown command, please try again"
   end
