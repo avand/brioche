@@ -41,8 +41,8 @@ post "/expenses" do
       confirmation = "Unknown expense type, please try again"
     end
   
-  elsif text.match(/^(\S*)(undo)(.*)/)
-    match = text.match(/^(\S*)(undo)(.*)/)
+  elsif text.match(/^(\S*)(rr|Rr)(.*)/)
+    match = text.match(/^(\S*)(rr|Rr)(.*)/)
     
     undo   = match.to_f
 
