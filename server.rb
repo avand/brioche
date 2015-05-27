@@ -18,7 +18,22 @@ post "/expenses" do
     expitem     = match[3].strip
     date        = Time.now.strftime("%-m/%-d/%Y")
 
-    session     = GoogleDrive.login(ENV["GOOGLE_EMAIL"], ENV["GOOGLE_PASSWORD"])
+    # New GDrive OAuth login
+    client = Google::APIClient.new(application_name: 'Expenses App', application_version: '1.0')
+    key = Google::APIClient::KeyUtils.load_from_pkcs12(
+        'ExpenseApp-24bfd88f2586.p12',
+        'notasecret')
+
+    asserter = Google::APIClient::JWTAsserter.new(
+        '856088020238-thp4gnkvotn3d1m23j2itllld4ofstcj@developer.gserviceaccount.com',
+        ['https://www.googleapis.com/auth/drive','https://docs.google.com/feeds/','https://docs.googleusercontent.com/','https://spreadsheets.google.com/feeds/'],
+        key
+    )
+    client.authorization = asserter.authorize
+    session = GoogleDrive.login_with_oauth(client.authorization.access_token)
+    
+    # Old GDrive login
+    #session     = GoogleDrive.login(ENV["GOOGLE_EMAIL"], ENV["GOOGLE_PASSWORD"])
     spreadsheet = session.spreadsheet_by_key(ENV["SPREADSHEET_KEY"])
     worksheet   = spreadsheet.worksheets[ENV["WORKSHEET_INDEX"].to_i]
     row         = worksheet.num_rows + 1
