@@ -20,7 +20,7 @@ post "/expenses" do
     expitem     = match[3].strip
     date        = Time.now.strftime("%-m/%-d/%Y")
 
-    session     = GoogleDrive::Session.from_config("config.json")
+    session     = GoogleDrive::Session.from_service_account_key(ENV["GOOGLE_APPLICATION_CREDENTIALS"])
     spreadsheet = session.spreadsheet_by_key(ENV["SPREADSHEET_KEY"])
     worksheet   = spreadsheet.worksheets[ENV["WORKSHEET_INDEX"].to_i]
     row         = worksheet.num_rows + 1
