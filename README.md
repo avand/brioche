@@ -52,8 +52,6 @@ You can then use the "m" in Google Docs for mileage reimbursement calculation, e
 
 1. Push this code up to a Heroku Cedar app.
 2. Setup the following env variables (.env if you're using [Foreman][1]):
-  * `GOOGLE_EMAIL`: The email address associated with your Google account.
-  * `GOOGLE_PASSWORD`: The password for your Google account.
   * `TWILIO_ACCOUNT_SID`: Available on your Twilio dashboard.
   * `TWILIO_AUTH_TOKEN`: Keep this a secret.
   * `SPREADSHEET_KEY`: Grab this from the URL to the Google Doc spreadsheet.
