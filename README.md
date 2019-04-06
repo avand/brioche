@@ -4,7 +4,7 @@ The fun way to slice the bread.
 
 ## What is it?
 
-A simple way to enter expenses, mileage, and hours into Google Docs from a text-message.  You can specify "m" or "M" for *mileage* driven, "d" or "D" for *dollars* spent and "h" or "H" for *hours* worked--good for overtime.
+A simple way to enter expenses, mileage, and hours into Google Docs from a text/SMS message.  You can specify "m" or "M" for *mileage* driven, "d" or "D" for *dollars* spent and "h" or "H" for *hours* worked--good for overtime.
 
 For example, if you texted:
 
@@ -53,9 +53,9 @@ You can then use the "m" in Google Docs for mileage reimbursement calculation, e
 1. Push this code up to a Heroku Cedar app.
 2. Setup the following env variables (.env if you're using [Foreman][1]):
   * `TWILIO_ACCOUNT_SID`: Available on your Twilio dashboard.
-  * `TWILIO_AUTH_TOKEN`: Keep this a secret.
-  * `SPREADSHEET_KEY`: Grab this from the URL to the Google Doc spreadsheet.
-  * `WORKSHEET_INDEX`: The index (0-based) of the worksheet.
+  * `TWILIO_AUTH_TOKEN`: Also available on your Twilio dasboard, Keep this a secret.
+  * `SPREADSHEET_KEY`: Grab this from the URL for your Google Sheet.
+  * `GDRIVE_AUTH`: Base64 encoded service account json from the [Google Console](https://console.developers.google.com/projectselector2/iam-admin/serviceaccounts?supportedpurview=project&project&folder&organizationId) for your app.
   * Make sure you don't add these files to your git repo!
 2. Register a Twilio number.
 3. Point the SMS URL for that number to http://your-app.herokuapp.com/expenses.
