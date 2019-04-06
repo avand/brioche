@@ -5,6 +5,7 @@ require 'dotenv'
 Dotenv.load
 
 client = Twilio::REST::Client.new(ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"])
+client_secret = StringIO.new(Base64.decode64(ENV['GDRIVE_AUTH']))
 
 post "/expenses" do
   to_number   = params["To"]
@@ -20,7 +21,7 @@ post "/expenses" do
     expitem     = match[3].strip
     date        = Time.now.strftime("%-m/%-d/%Y")
 
-    session     = GoogleDrive::Session.from_service_account_key(ENV["GOOGLE_APPLICATION_CREDENTIALS"])
+    session     = GoogleDrive::Session.from_service_account_key(client_secret)
     spreadsheet = session.spreadsheet_by_key(ENV["SPREADSHEET_KEY"])
     worksheet   = spreadsheet.worksheets[ENV["WORKSHEET_INDEX"].to_i]
     row         = worksheet.num_rows + 1
