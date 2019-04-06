@@ -23,7 +23,7 @@ post "/expenses" do
 
     session     = GoogleDrive::Session.from_service_account_key(client_secret)
     spreadsheet = session.spreadsheet_by_key(ENV["SPREADSHEET_KEY"])
-    worksheet   = spreadsheet.worksheets[ENV["WORKSHEET_INDEX"].to_i]
+    worksheet   = spreadsheet.worksheets.first
     row         = worksheet.num_rows + 1
 
     worksheet[row, 2] = expitem
