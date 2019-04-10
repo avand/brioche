@@ -1,7 +1,8 @@
 source "https://rubygems.org"
 
-ruby "2.0.0"
+ruby "2.5.0"
 
 gem "sinatra"
-gem "google_drive"
 gem "twilio-ruby"
+gem "google_drive"
+gem "dotenv"
