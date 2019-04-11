@@ -1,3 +1,5 @@
 config.json
 .env
 test_post
+.csv
+test.rb

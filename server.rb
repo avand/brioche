@@ -1,7 +1,10 @@
 require "sinatra"
 require "google_drive"
 require "twilio-ruby"
-require 'dotenv'
+require "mail"
+require "csv"
+require "down"
+require "dotenv"
 Dotenv.load
 
 client = Twilio::REST::Client.new(ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"])
@@ -52,4 +55,55 @@ post "/expenses" do
     to:   from_number,
     body: confirmation
   ) if to_number && from_number
+end
+
+get "/expenses/send" do
+  $recipients = params["recipients"]
+
+  if request.params.count > 0
+    stamp = Time.now.strftime('%Y-%m-%d-')
+    $attachfile = stamp + 'expenses.csv'
+    expfile = Down.download(ENV['EXP_QUERY'])
+    exptable = CSV.parse(expfile, :headers => true)
+    sumfile = Down.download(ENV['SUM_QUERY'])
+    sumtable = CSV.foreach(sumfile, :headers => true, header_converters: :symbol, :converters => :float) do |row|
+        expensesum = row[:sum].round(2)
+        exptable << ["Total","","","","","$" + expensesum.to_s]
+        tempfile = File.new($attachfile,"w")
+        tempfile << exptable
+        tempfile.close
+    end
+
+    def mailsender
+        Mail.defaults do
+          delivery_method :smtp, { 
+            :address => 'email-smtp.us-east-1.amazonaws.com',
+            :port => 465,
+            :user_name => ENV['AWS_SMTP_USER'],
+            :password => ENV['AWS_SMTP_PASSWORD'],
+            :authentication => :plain,
+            :tls => true
+          }
+        end
+
+        Mail.deliver do
+          from     ENV['AWS_SMTP_FROM']
+          to       $recipients
+          subject  ENV['SMTP_BODY']
+          body     ENV['SMTP_SUBJECT']
+          add_file $attachfile
+        end
+    end
+
+    # Send expense report
+    puts mailsender
+
+    # Delete csv file after send
+    File.delete($attachfile)
+    return 'Message sent'
+  
+  else
+    return 'Missing email recipient'
+  end
+
 end
