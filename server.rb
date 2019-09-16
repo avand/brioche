@@ -15,7 +15,7 @@ post "/expenses" do
   from_number = params["From"]
 
   text  = params["Body"]
-  
+
   if text.match(/^(\S*)(m|M|d|D|h|H)(.*)/)
     match = text.match(/^(\S*)(m|M|d|D|h|H)(.*)/)
 
@@ -67,7 +67,7 @@ get "/expenses/send" do
     exptable = CSV.parse(expfile, :headers => true)
     sumfile = Down.download(ENV['SUM_QUERY'])
     sumtable = CSV.foreach(sumfile, :headers => true, header_converters: :symbol, :converters => :float) do |row|
-        expensesum = row[:sum].round(2)
+        expensesum = row[0].to_f.round(2)
         exptable << ["Total","","","","","$" + expensesum.to_s]
         tempfile = File.new($attachfile,"w")
         tempfile << exptable
@@ -76,7 +76,7 @@ get "/expenses/send" do
 
     def mailsender
         Mail.defaults do
-          delivery_method :smtp, { 
+          delivery_method :smtp, {
             :address => 'email-smtp.us-east-1.amazonaws.com',
             :port => 465,
             :user_name => ENV['AWS_SMTP_USER'],
@@ -101,7 +101,7 @@ get "/expenses/send" do
     # Delete csv file after send
     File.delete($attachfile)
     return 'Message sent'
-  
+
   else
     return 'Missing email recipient'
   end
