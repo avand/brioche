@@ -95,12 +95,16 @@ get "/expenses/send" do
         end
     end
 
-    # Send expense report
-    puts mailsender
+    # Send expense report if exists
+    if File.file?('*expenses.csv')
+      puts mailsender
+    else
+      return 'No expenses file found'
+    end
 
     # Delete csv file after send
     File.delete($attachfile)
-    return 'Message sent'
+    return 'Message sent to ' + $recipients
 
   else
     return 'Missing email recipient'
