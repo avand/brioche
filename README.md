@@ -56,6 +56,13 @@ You can then use the "m" in Google Docs for mileage reimbursement calculation, e
   * `TWILIO_AUTH_TOKEN`: Also available on your Twilio dasboard, Keep this a secret.
   * `SPREADSHEET_KEY`: Grab this from the URL for your Google Sheet.
   * `GDRIVE_AUTH`: Base64 encoded service account json from the [Google Console](https://console.developers.google.com/projectselector2/iam-admin/serviceaccounts?supportedpurview=project&project&folder&organizationId) for your app.
+  * `EXP_QUERY`: Your Google Sheets query
+  * `SUM_QUERY`: Separate Google Sheets for the total row
+  * `AWS_SMTP_USER`: AWS STMP username
+  * `AWS_SMTP_PASSWORD`: AWS SMTP password
+  * `AWS_SMTP_FROM`: Validated "from" address from AWS SES
+  * `SMTP_SUBJECT`: Email subject
+  * `SMTP_BODY`: Email body
   * Make sure you don't add these files to your git repo!
 2. Register a Twilio number.
 3. Point the SMS URL for that number to http://your-app.herokuapp.com/expenses.
