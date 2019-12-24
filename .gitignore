@@ -1,4 +1,5 @@
 config.json
+client_secret.json
 .env
 test_post
 .csv

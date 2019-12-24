@@ -8,7 +8,7 @@ require "dotenv"
 Dotenv.load
 
 client = Twilio::REST::Client.new(ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"])
-client_secret = StringIO.new(Base64.decode64(ENV['GDRIVE_AUTH']))
+client_secret = Base64.decode64(ENV['GDRIVE_AUTH'])
 
 post "/expenses" do
   to_number   = params["To"]
@@ -24,7 +24,7 @@ post "/expenses" do
     expitem     = match[3].strip
     date        = Time.now.strftime("%-m/%-d/%Y")
 
-    session     = GoogleDrive::Session.from_service_account_key(client_secret)
+    session     = GoogleDrive::Session.from_service_account_key(StringIO.new(client_secret))
     spreadsheet = session.spreadsheet_by_key(ENV["SPREADSHEET_KEY"])
     worksheet   = spreadsheet.worksheets[0]
     row         = worksheet.num_rows + 1
@@ -35,7 +35,7 @@ post "/expenses" do
     worksheet[row, 5] = date
     worksheet[row, 6] = from_number
 
-    worksheet.save()
+    worksheet.save
 
     if exptype == "m" || exptype == "M"
       confirmation = "Drove #{expamount} miles on #{date} to/from #{expitem}"
